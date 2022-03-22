@@ -1,0 +1,34 @@
+---
+- hosts: node1
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: "Set timestamp of the backup"
+      set_fact:
+       date: "{{ ansible_date_time.date }}"
+       time: "{{ ansible_date_time.time }}"
+
+    - name: "Create a backup directory"
+      file:
+        path: "{{ guest }}{{ date }}-{{time }}/"
+        mode: 0777
+        owner: postgres
+        state: directory
+      become: yes
+
+    - name: "Back up the database"
+      postgresql_db:
+        state: dump
+        name: "{{ db_name }}"
+        target: "{{ guest }}{{ date }}-{{ time }}/{{ db_name }}.dump.gz"
+      become: yes
+      become_user: postgres
+
+    - name: "Fetch backup from the server"
+      fetch:
+        src: "{{ guest }}{{ date }}-{{ time }}/{{ db_name }}.dump.gz"
+        dest: "{{ host }}{{ ansible_hostname }}-{{ db_name }}-{{ date }}-{{ time }}.dump.gz"
+        flat: yes

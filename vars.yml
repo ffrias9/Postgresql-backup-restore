@@ -1,0 +1,7 @@
+---
+db_name: database1
+guest: /tmp/backupsdb/
+host: /tmp/backupsdb/
+#Restore
+file: /tmp/backupsdb/slave3-database1-2022-03-22-09:16:44.dump.gz
+dest: /tmp/backup.dump.gz

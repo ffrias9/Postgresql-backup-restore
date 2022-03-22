@@ -1,0 +1,27 @@
+---
+- hosts: node1
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: "Copiar backup al servidor"
+      copy:
+        src: "{{ file }}"
+        dest: "{{ dest }}"
+
+    - name: "Crear base de datos"
+      postgresql_db:
+        state: present
+        name: "Restore-{{ db_name }}"
+      become: yes
+      become_user: postgres
+
+    - name: "Restaurar base de datos"
+      postgresql_db:
+        state: restore
+        name: "Restore-{{ db_name }}"
+        target: "{{ dest }}"
+      become: yes
+      become_user: postgres
