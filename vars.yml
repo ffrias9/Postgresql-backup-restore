@@ -3,5 +3,5 @@ db_name: database1
 guest: /tmp/backupsdb/
 host: /tmp/backupsdb/
 #Restore
-file: /tmp/backupsdb/slave3-database1-2022-03-22-09:16:44.dump.gz
+file: /tmp/backupsdb/slave2-database1-2023-01-19-12:08:57.dump.gz
 dest: /tmp/backup.dump.gz
